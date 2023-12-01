@@ -9,11 +9,17 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
+import android.view.View
 import android.view.Window
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import coil.load
+import coil.request.CachePolicy
+import coil.size.ViewSizeResolver
+import pl.ozodbek.permissionspractice.R
 import pl.ozodbek.permissionspractice.databinding.DialogPermissionAlertBinding
 
 
@@ -124,3 +130,28 @@ fun Activity.showPermissionAlert(
     mDialog.window!!.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT)
 }
 
+fun View.onClick(clickListener: (View) -> Unit) {
+    setOnClickListener(clickListener)
+}
+
+fun <T> ImageView.loadImage(image: T?) {
+    this.load(image.takeIf { it?.toString()?.isNotBlank() == true } ?: R.drawable.ic_error_placeholder) {
+        crossfade(true)
+        placeholder(R.drawable.ic_error_placeholder)
+        error(R.drawable.ic_error_placeholder)
+        size(ViewSizeResolver(this@loadImage))
+        memoryCachePolicy(CachePolicy.ENABLED)
+        diskCachePolicy(CachePolicy.ENABLED)
+    }
+
+
+    /** IMAGE LOADING CACHE
+
+    val imageLoader = ImageLoader.Builder(context)
+    .respectCacheHeaders(false)
+    .build()
+    Coil.setImageLoader(imageLoader)
+
+
+     */
+}
